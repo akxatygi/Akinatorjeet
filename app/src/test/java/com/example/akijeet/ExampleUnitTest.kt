@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.akijeet
 
 import org.junit.Test
 

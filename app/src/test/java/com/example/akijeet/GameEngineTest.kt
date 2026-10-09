@@ -1,8 +1,8 @@
-package com.example.quizapp
+package com.example.akijeet
 
-import com.example.quizapp.data.GameData
-import com.example.quizapp.game.Answer
-import com.example.quizapp.game.GameEngine
+import com.example.akijeet.data.GameData
+import com.example.akijeet.game.Answer
+import com.example.akijeet.game.GameEngine
 import com.google.gson.Gson
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

@@ -1,4 +1,4 @@
-package com.example.quizapp.data
+package com.example.akijeet.data
 
 import android.content.Context
 import com.google.gson.Gson

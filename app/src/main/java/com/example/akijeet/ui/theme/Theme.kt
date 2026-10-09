@@ -1,4 +1,4 @@
-package com.example.quizapp.ui.theme
+package com.example.akijeet.ui.theme
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.lightColorScheme
@@ -17,7 +17,7 @@ private val AppColorScheme = lightColorScheme(
 )
 
 @Composable
-fun QuizAppTheme(content: @Composable () -> Unit) {
+fun AkijeetTheme(content: @Composable () -> Unit) {
     MaterialTheme(
         colorScheme = AppColorScheme,
         typography = Typography,

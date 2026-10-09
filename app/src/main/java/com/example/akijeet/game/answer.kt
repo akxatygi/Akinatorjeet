@@ -1,4 +1,4 @@
-package com.example.quizapp.game
+package com.example.akijeet.game
 
 enum class Answer(val weight: Double) {
     YES(1.0),

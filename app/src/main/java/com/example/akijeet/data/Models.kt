@@ -1,4 +1,4 @@
-package com.example.quizapp.data
+package com.example.akijeet.data
 
 data class Question(val id: String, val text: String)
 

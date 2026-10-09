@@ -1,4 +1,4 @@
-package com.example.quizapp
+package com.example.akijeet
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,16 +10,12 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         setContentView(R.layout.activity_splash)
 
         Handler(Looper.getMainLooper()).postDelayed({
-
-            val intent = Intent(this, MainActivity::class.java)
+            val intent = Intent(this, StartActivity::class.java)
             startActivity(intent)
-
             finish()
-
-        }, 2000)
+        }, 3000)
     }
 }

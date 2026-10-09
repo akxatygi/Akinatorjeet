@@ -75,7 +75,7 @@ Because answers add or subtract points instead of hard-eliminating people, one m
 app/src/main/
 ├── assets/
 │   └── celebrities.json            <- all questions and celebrity data
-├── java/com/example/quizapp/
+├── java/com/example/akijeet/
 │   ├── SplashActivity.kt           <- XML splash screen, then opens MainActivity
 │   ├── MainActivity.kt             <- hosts the Compose UI
 │   ├── data/
@@ -94,7 +94,7 @@ app/src/main/
 │   └── values/                     <- strings.xml, colors.xml, themes.xml
 └── AndroidManifest.xml
 
-app/src/test/java/com/example/quizapp/
+app/src/test/java/com/example/akijeet/
 └── GameEngineTest.kt               <- plays the game as every celebrity
 ```
 

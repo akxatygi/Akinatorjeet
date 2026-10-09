@@ -1,12 +1,12 @@
-package com.example.quizapp.ui.theme
+package com.example.akijeet.ui.theme
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import com.example.quizapp.data.Celebrity
-import com.example.quizapp.data.GameRepository
-import com.example.quizapp.data.Question
-import com.example.quizapp.game.Answer
-import com.example.quizapp.game.GameEngine
+import com.example.akijeet.data.Celebrity
+import com.example.akijeet.data.GameRepository
+import com.example.akijeet.data.Question
+import com.example.akijeet.game.Answer
+import com.example.akijeet.game.GameEngine
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

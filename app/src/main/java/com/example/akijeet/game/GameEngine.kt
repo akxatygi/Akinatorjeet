@@ -1,8 +1,8 @@
-package com.example.quizapp.game
+package com.example.akijeet.game
 
-import com.example.quizapp.data.Celebrity
-import com.example.quizapp.data.GameData
-import com.example.quizapp.data.Question
+import com.example.akijeet.data.Celebrity
+import com.example.akijeet.data.GameData
+import com.example.akijeet.data.Question
 import kotlin.math.abs
 
 class GameEngine(private val data: GameData) {
