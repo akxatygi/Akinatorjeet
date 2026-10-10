@@ -22,24 +22,33 @@
             </intent-filter>
         </activity>
 
-        <!-- Start Screen -->
+
         <activity
             android:name=".StartActivity"
             android:exported="false" />
 
-        <!-- Question Screen -->
+
+        <activity
+            android:name=".SelectCelebActivity"
+            android:exported="false" />
+
+
         <activity
             android:name=".QuestionActivity"
             android:exported="false" />
 
-        <!-- Guess Screen -->
+
         <activity
             android:name=".GuessActivity"
             android:exported="false" />
 
-        <!-- Result Screen -->
+
         <activity
             android:name=".ResultActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".InstructionsActivity"
             android:exported="false" />
 
     </application>

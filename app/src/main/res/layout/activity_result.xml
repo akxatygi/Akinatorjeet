@@ -13,8 +13,8 @@
         android:fontFamily="@font/southern_beach"
         android:gravity="center"
         android:text="Game Over!"
-        android:textColor="@color/black"
-        android:textSize="70sp"
+        android:textColor="@color/white"
+        android:textSize="56sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@id/gameOverSubtitle"
         app:layout_constraintEnd_toEndOf="parent"
@@ -26,22 +26,79 @@
         android:id="@+id/gameOverSubtitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:fontFamily="@font/southern_beach"
         android:gravity="center"
         android:text="Subtitle goes here"
-        android:textColor="@color/black"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toTopOf="@id/btnPlayAgain"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@id/scoreCard"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/gameOverTitle" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/scoreCard"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="#D4D4EC"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="6dp"
+        app:layout_constraintBottom_toTopOf="@id/btnPlayAgain"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/gameOverSubtitle">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/scoreText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/southern_beach"
+                android:text="Score: 100/100"
+                android:textColor="#1E1E31"
+                android:textSize="32sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/questionsCountText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/southern_beach"
+                android:text="Guessed in 5 questions"
+                android:textColor="#36377D"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/ratingText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/southern_beach"
+                android:text="⭐⭐⭐⭐⭐ (Master Mind!)"
+                android:textColor="#1E1E31"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
     <Button
         android:id="@+id/btnPlayAgain"
         android:layout_width="0dp"
         android:layout_height="56dp"
-        android:layout_marginTop="42dp"
+        android:layout_marginTop="32dp"
         android:backgroundTint="#1E1E31"
         android:fontFamily="@font/southern_beach"
         android:text="PLAY AGAIN"
@@ -51,7 +108,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/gameOverSubtitle"
+        app:layout_constraintTop_toBottomOf="@id/scoreCard"
         app:layout_constraintWidth_percent="0.8" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -32,6 +32,7 @@ class GuessActivity : AppCompatActivity() {
                 putExtra(ResultActivity.EXTRA_WON, true)
             }
             startActivity(intent)
+            overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             finish()
         }
 
@@ -49,9 +50,11 @@ class GuessActivity : AppCompatActivity() {
                     putExtra(ResultActivity.EXTRA_WON, false)
                 }
                 startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
                 finish()
             } else {
                 finish()
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             }
         }
     }

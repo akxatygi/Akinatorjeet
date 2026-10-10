@@ -68,6 +68,7 @@ class QuestionActivity : AppCompatActivity() {
                     putExtra(GuessActivity.EXTRA_CELEBRITY_NAME, guess.name)
                 }
                 startActivity(intent)
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
             } else {
                 openResultScreen(won = false)
             }
@@ -89,6 +90,7 @@ class QuestionActivity : AppCompatActivity() {
             putExtra(ResultActivity.EXTRA_WON, won)
         }
         startActivity(intent)
+        overridePendingTransition(R.anim.fade_in, R.anim.fade_out)
         finish()
     }
 }
