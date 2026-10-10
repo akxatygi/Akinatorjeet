@@ -2,42 +2,96 @@
 
 An Akinator-style Android game. Think of a Bollywood celebrity, answer a handful of questions, and the app tries to guess who you picked.
 
-What fun is an normal quiz app why not see magic happen by answering some simple questions 
+What fun is a normal quiz app? Why not see some magic happen by answering a few simple questions.
 
-It runs fully **offline**. There is no server and no AI model. The "brain" is a small scoring algorithm working on a hand-made dataset of 30 celebrities and 20 questions.
+It runs fully **offline**. There is no server and no AI model. The "brain" is a small scoring algorithm working on a hand-made dataset of 60 celebrities and 24 questions.
 
-> **Status:** working MVP. See [Roadmap](#roadmap) for planned features.
+> **Status:** working MVP with two game modes. See [Roadmap](#roadmap) for planned features.
 
 ---
 
 ## Table of contents
 
-1. [How to play](#how-to-play)
-2. [Tech stack](#tech-stack)
-3. [How it works](#how-it-works)
-4. [App flow and screens](#app-flow-and-screens)
-5. [Project structure](#project-structure)
-6. [The dataset](#the-dataset)
-7. [The game engine](#the-game-engine)
-8. [Architecture](#architecture)
-9. [Look and feel](#look-and-feel)
-10. [Build and run](#build-and-run)
-11. [Testing](#testing)
-12. [Known limitations](#known-limitations)
-13. [Roadmap](#roadmap)
-14. [Disclaimer](#disclaimer)
+1. [Features](#features)
+2. [How to play](#how-to-play)
+3. [Game modes](#game-modes)
+4. [Tech stack](#tech-stack)
+5. [How it works](#how-it-works)
+6. [App flow and screens](#app-flow-and-screens)
+7. [Project structure](#project-structure)
+8. [The dataset](#the-dataset)
+9. [The game engine](#the-game-engine)
+10. [Architecture](#architecture)
+11. [Look and feel](#look-and-feel)
+12. [Build and run](#build-and-run)
+13. [Testing](#testing)
+14. [Known limitations](#known-limitations)
+15. [Roadmap](#roadmap)
+16. [Disclaimer](#disclaimer)
+
+---
+
+## Features
+
+- **Classic Mode:** think of a celebrity and let the app read your mind.
+- **Target Celeb Challenge:** pick a celebrity from a searchable list, answer for them truthfully, and earn a score and star rating based on how quickly the app finds them.
+- Five answer options: Yes, Probably, Don't know, Probably not, No.
+- Smart question choice: always asks the question that best splits the remaining candidates.
+- Forgiving scoring: one wrong answer does not break the game.
+- Up to 3 guesses per round.
+- Instructions screen that explains the rules of the chosen mode.
+- Smooth fade transitions between every screen.
+- Custom font, colour theme and logo.
+- Works fully offline.
 
 ---
 
 ## How to play
 
 1. Open the app. A splash screen appears for about 3 seconds, then the start screen.
-2. Think of one celebrity from the dataset (an actor, singer, composer, or director).
-3. Tap **Start**. The app asks yes/no style questions such as "Is the person male?".
-4. Answer with one of five options: **Yes, Probably, Don't know, Probably not, No**.
+2. Choose a mode: **CLASSIC MODE** or **TARGET CELEB CHALLENGE**.
+3. Read the instructions and continue.
+4. Answer the questions with one of five options: **Yes, Probably, Don't know, Probably not, No**.
 5. When the app is confident, it names a celebrity. Tell it whether it is right.
 6. If it is wrong, it tries its next-best guess. After **3 wrong guesses** you win the round.
-7. On the result screen, tap **Play again** to start over.
+7. On the result screen, tap **PLAY AGAIN** to return to the start screen.
+
+---
+
+## Game modes
+
+### Classic Mode
+
+1. Think of any famous Bollywood celebrity from the dataset. Do not tell the app.
+2. Answer each question truthfully.
+3. The app tries to guess who you are thinking of in 15 questions or fewer.
+
+If the app guesses right, the result screen says **"AKIJEET Guessed It!"**. If it fails after 3 wrong guesses, you see **"You Beat AKIJEET!"**.
+
+### Target Celeb Challenge
+
+1. Pick a target celebrity from the list. The list is sorted alphabetically and has a search box ("Search celebrity name...").
+2. Answer every question truthfully for that celebrity.
+3. The faster the app identifies your target, the higher your score.
+
+When the app guesses your target, the result screen shows the target's name, your score out of 100, how many questions it took, and a star rating.
+
+#### Scoring
+
+```
+questions asked <= 5   ->  100 points
+questions asked >= 15  ->   50 points
+otherwise              ->  100 - (questions asked - 5) x 5
+```
+
+| Questions asked | Score | Rating |
+|---|---|---|
+| 5 or 6 | 100 or 95 | 5 stars, "Master Mind!" |
+| 7 or 8 | 90 or 85 | 4 stars, "Awesome!" |
+| 9 to 11 | 80, 75 or 70 | 3 stars, "Great Job!" |
+| 12 or more | 65 down to 50 | 2 stars, "Good Effort!" |
+
+The score is only shown when the app wins. If the app fails to guess the target, the result screen says **"Couldn't guess <name>!"** and shows no score.
 
 ---
 
@@ -46,14 +100,14 @@ It runs fully **offline**. There is no server and no AI model. The "brain" is a 
 | Part | Technology |
 |---|---|
 | Language | Kotlin 2.0.21 |
-| Screens | Classic Android Views: five `AppCompatActivity` screens with XML layouts |
-| Theme resources | XML (`strings.xml`, `colors.xml`, `themes.xml`) |
-| Game state | A `GameManager` singleton that holds the engine and the wrong-guess counter |
-| Data loading | Gson (reads JSON from the `assets` folder) |
-| Build system | Gradle 8.13 with Android Gradle Plugin 8.13.2 and a version catalog (`gradle/libs.versions.toml`) |
+| Screens | Seven `AppCompatActivity` screens with XML layouts |
+| UI components | Material Components, ConstraintLayout, CardView, RecyclerView (for the celebrity list) |
+| Theme and resources | XML (`strings.xml`, `colors.xml`, `themes.xml`, `anim/`, `font/`, `drawable/`) |
+| Game state | A `GameManager` singleton that holds the engine, the mode, the target and the wrong-guess counter |
+| Data loading | Gson 2.11.0 (reads JSON from the `assets` folder) |
+| Android versions | `minSdk` 24 (Android 7.0), `compileSdk` and `targetSdk` 36 |
+| Build system | Gradle 8.13 with Android Gradle Plugin 8.13.2 and a version catalog (`gradle/libs.versions.toml`), Java 17 |
 | Tests | JUnit 4 (plain unit tests, no emulator needed) |
-
-Every screen is an `Activity` with its own XML layout. `GameViewModel` is in the project but no screen uses it (see [Architecture](#architecture)).
 
 ---
 
@@ -74,26 +128,35 @@ Because answers add or subtract points instead of hard-eliminating people, one m
 ## App flow and screens
 
 ```
-SplashActivity ──> StartActivity ──> QuestionActivity ──> GuessActivity ──> ResultActivity
-   (3 seconds)        (Start)         (asks questions)     (Yes / No)        (won or lost)
-                                            ^                   |
-                                            └───── wrong guess ─┘
+SplashActivity ──> StartActivity ──┬── CLASSIC MODE ─────────────> InstructionsActivity ──────────┐
+                                   │                                                              │
+                                   └── TARGET CELEB CHALLENGE ──> InstructionsActivity            │
+                                                                        │                         │
+                                                                  SelectCelebActivity             │
+                                                                        │                         │
+                                                                        v                         v
+                                          ResultActivity <── GuessActivity <──> QuestionActivity
+                                          (won or lost)       (Yes / No)        (asks questions)
 ```
 
 | Screen | Activity | Layout | What it does |
 |---|---|---|---|
 | Splash | `SplashActivity` | `activity_splash` | Shows the logo for 3 seconds, then opens the start screen and closes itself. This is the launcher activity. |
-| Start | `StartActivity` | `activity_start` | The **Start** button (`startButton`) calls `GameManager.initGame()` to load the data and reset the engine, then opens the question screen. |
+| Start | `StartActivity` | `activity_start` | Two buttons: **CLASSIC MODE** (`startButton`) and **TARGET CELEB CHALLENGE** (`targetModeButton`). Both open the instructions screen and pass the chosen mode along. |
+| Instructions | `InstructionsActivity` | `activity_instructions` | Shows the rules for the chosen mode. In Classic Mode the button reads **START GAME**: it resets the engine and opens the question screen. In Target Mode it reads **SELECT CELEBRITY** and opens the celebrity list. |
+| Select celebrity | `SelectCelebActivity` | `activity_select_celeb`, `item_celebrity` | Shows every celebrity in a `RecyclerView`, sorted by name, with a search box that filters the list as you type. Tapping a name starts a Target Mode game with that celebrity and opens the question screen. |
 | Question | `QuestionActivity` | `activity_question` | Shows "Question #N" and the question text, with five answer buttons (`btnYes`, `btnProbably`, `btnDontKnow`, `btnProbablyNot`, `btnNo`). After each answer it asks the engine whether to guess or to ask another question. |
-| Guess | `GuessActivity` | `activity_guess` | Shows the guessed name. **Yes** opens the result screen as a win. **No** rejects that celebrity, adds one wrong guess, and either returns to the question screen or ends the game after 3 wrong guesses. |
-| Result | `ResultActivity` | `activity_result` | Shows "I guessed it!" or "You beat me!" with a subtitle, and a **Play again** button that clears the task and returns to the start screen. |
+| Guess | `GuessActivity` | `activity_guess` | Shows "Is it..." and the guessed name. **YES!** opens the result screen as a win. **NO** rejects that celebrity, adds one wrong guess, and either returns to the question screen or ends the game after 3 wrong guesses. |
+| Result | `ResultActivity` | `activity_result` | Shows the win or loss message. In Target Mode after a win it also shows a score card with the score, number of questions and star rating. **PLAY AGAIN** clears the task and returns to the start screen. |
 
 ### How the screens talk to each other
 
+- The chosen mode travels from the start screen to `InstructionsActivity` as an intent extra (`EXTRA_IS_TARGET_MODE`).
+- The chosen mode and the target celebrity are then stored in `GameManager` (`isTargetMode`, `targetCelebrity`) when the game is initialised.
 - The celebrity name travels to `GuessActivity` as an intent extra (`EXTRA_CELEBRITY_NAME`).
-- The win or loss travels to `ResultActivity` as `EXTRA_WON`.
+- The win or loss travels to `ResultActivity` as `EXTRA_WON`. The result screen reads the mode, target and question count from `GameManager`.
 - `QuestionActivity` stays open underneath `GuessActivity`. When a wrong guess closes the guess screen, `QuestionActivity.onRestart()` runs `displayNextStep()` again, which decides whether to ask another question or make the next guess.
-- The shared game state lives in `GameManager`, so all screens see the same engine.
+- Every screen change uses `overridePendingTransition(R.anim.fade_in, R.anim.fade_out)`. Both animations are plain alpha fades of 800 ms.
 
 ---
 
@@ -102,36 +165,40 @@ SplashActivity ──> StartActivity ──> QuestionActivity ──> GuessActiv
 ```
 app/src/main/
 ├── assets/
-│   └── celebrities.json            <- all questions and celebrity data
+│   └── celebrities.json              <- all questions and celebrity data
 ├── java/com/example/akijeet/
-│   ├── SplashActivity.kt           <- launcher screen, opens StartActivity after 3 seconds
-│   ├── StartActivity.kt            <- Start button, initialises the game
-│   ├── QuestionActivity.kt         <- shows questions, collects the five answer types
-│   ├── GuessActivity.kt            <- shows a guess, handles Yes / No
-│   ├── ResultActivity.kt           <- win / lose screen and Play again
+│   ├── SplashActivity.kt             <- launcher screen, opens StartActivity after 3 seconds
+│   ├── StartActivity.kt              <- mode selection (Classic or Target Challenge)
+│   ├── InstructionsActivity.kt       <- rules for the chosen mode, starts the game or opens the list
+│   ├── SelectCelebActivity.kt        <- searchable celebrity list (RecyclerView) for Target Mode
+│   ├── QuestionActivity.kt           <- shows questions, collects the five answer types
+│   ├── GuessActivity.kt              <- shows a guess, handles Yes / No
+│   ├── ResultActivity.kt             <- win / lose screen, score card, Play again
 │   ├── data/
-│   │   ├── Models.kt               <- Question, Celebrity, GameData
-│   │   └── GameRepository.kt       <- loads celebrities.json using Gson
-│   ├── game/
-│   │   ├── answer.kt               <- the five answer options and their weights
-│   │   ├── GameEngine.kt           <- scoring, next-question choice, guess rule
-│   │   └── GameManager.kt          <- singleton that owns the engine and wrong-guess count
-│   └── ui/
-│       └── GameViewModel.kt        <- unused for now
+│   │   ├── Models.kt                 <- Question, Celebrity, GameData
+│   │   └── GameRepository.kt         <- loads celebrities.json using Gson
+│   └── game/
+│       ├── answer.kt                 <- the five answer options and their weights
+│       ├── GameEngine.kt             <- scoring, next-question choice, guess rule
+│       └── GameManager.kt            <- singleton: engine, mode, target, wrong guesses, score and rating
 ├── res/
-│   ├── layout/                     <- activity_splash, _start, _question, _guess, _result
-│   ├── font/                       <- southern_beach (custom font)
-│   ├── drawable/                   <- orange gradient background, logo (quizz.png)
-│   └── values/                     <- strings.xml, colors.xml, themes.xml
-└── AndroidManifest.xml             <- declares the five activities
+│   ├── anim/                         <- fade_in.xml, fade_out.xml
+│   ├── layout/                       <- activity_splash, _start, _instructions, _select_celeb,
+│   │                                    _question, _guess, _result, item_celebrity
+│   ├── font/                         <- southern_beach.ttf (custom font)
+│   ├── drawable/                     <- background.xml (purple gradient), quizz.png (logo)
+│   ├── mipmap-*/                     <- launcher icons
+│   └── values/                       <- strings.xml, colors.xml, themes.xml
+└── AndroidManifest.xml               <- declares the seven activities
 
 app/src/test/java/com/example/akijeet/
-└── GameEngineTest.kt               <- plays the game as every celebrity
+├── GameEngineTest.kt                 <- plays the game as every celebrity
+└── ExampleUnitTest.kt                <- default template test
 ```
 
 ### Manifest
 
-`AndroidManifest.xml` declares five activities. Only `SplashActivity` is exported and carries the `MAIN` / `LAUNCHER` intent filter. The other four are internal (`exported="false"`). The app uses the theme `Theme.AKIJEET`, and the icon, round icon and label come from the standard `mipmap` and `strings` resources.
+`AndroidManifest.xml` declares seven activities. Only `SplashActivity` is exported and carries the `MAIN` / `LAUNCHER` intent filter. The other six are internal (`exported="false"`). The app uses the theme `Theme.AKIJEET`, which extends `Theme.MaterialComponents.DayNight.NoActionBar`.
 
 ---
 
@@ -165,15 +232,24 @@ It is parsed into three Kotlin data classes in `Models.kt`: `Question(id, text)`
 
 ### Current content
 
-- **30 celebrities:** 14 actors, 10 actresses, 3 musicians, 3 directors.
-- **20 questions:** gender, profession, era, family background, birthplace, awards (National Film Award, Padma), and a few fun ones (beauty pageant, "Khan" in the name, Hollywood work).
+- **60 celebrities:** 22 actors, 22 actresses, 8 singers and composers, and 8 directors and producers.
+- **24 questions** covering:
+  - gender and main profession (actor, music, director or producer)
+  - the decade the film career started (before 1990, 1990s, 2000s, 2010 or later)
+  - birth era (before 1970, 1985 or later, 1990 or later)
+  - family in films, Hollywood or international work, and whether the person is alive
+  - awards (National Film Award, Padma honours)
+  - birthplace (Mumbai, North India, outside India)
+  - a few fun ones (beauty pageant, "Khan" in the name, worked with Sanjay Leela Bhansali, child artist, started on television)
 
 ### Adding a celebrity
 
 1. Open `celebrities.json`.
-2. Copy an existing celebrity line and change the name.
-3. Set all 20 answers (`1`, `-1`, or `0`). Use `0` whenever you are not sure. Wrong data makes the game guess badly, so check facts first.
+2. Copy an existing celebrity entry and change the name.
+3. Set all 24 answers (`1`, `-1`, or `0`). Use `0` whenever you are not sure. Wrong data makes the game guess badly, so check facts first.
 4. Run the unit test (see [Testing](#testing)). It checks that the engine can still guess everyone.
+
+The new celebrity automatically appears in the Target Celeb Challenge list, because the list is built from the same file.
 
 ### Adding a question
 
@@ -239,7 +315,7 @@ These constants are in `GameEngine.kt`:
 
 The limit of 3 wrong guesses is currently written directly into `GuessActivity`.
 
-In a design-time simulation of this logic against the 30-celebrity dataset, truthful answers led to a correct guess for all 30 celebrities in about 9 questions on average, and a single wrong answer from the player still produced the right guess about 93% of the time.
+A simulation of this logic on the current 60-celebrity dataset, with truthful answers for every celebrity, guessed all 60 correctly. It needed 8 to 13 questions, about 9.8 on average.
 
 ---
 
@@ -250,23 +326,31 @@ celebrities.json
       |  (Gson, via GameRepository)
       v
   GameData ──> GameEngine <── GameManager (singleton) <── Activities
- (data classes)  (scoring and    (owns the engine and        Splash, Start, Question,
-                  next question)  the wrong-guess count)     Guess, Result
+ (data classes)  (scoring and    (engine, game mode,        Splash, Start, Instructions,
+                  next question)  target celebrity,          SelectCeleb, Question,
+                                  wrong guesses,             Guess, Result
+                                  score and rating)
 ```
 
 - **`GameEngine`** knows the rules but nothing about the screen.
-- **`GameManager`** is a Kotlin `object`. `initGame()` loads the data once, builds a fresh engine and resets the wrong-guess counter. `getEngine()` returns the current engine (creating one if needed). `findCelebrityByName()` turns the name passed between screens back into a `Celebrity`.
-- **Activities** read from and write to the shared engine. Each one handles only its own screen and button taps.
-- **`GameViewModel`** (with its `GameUiState`: `Start`, `Asking`, `Guessing`, `Won`, `Lost`) is a ready-made alternative controller. No activity uses it. It is kept in case the app moves to a ViewModel-based design later.
+- **`GameManager`** is a Kotlin `object`. It does more than hold the engine:
+  - `initGame(context, targetMode, target)` loads the data once, builds a fresh engine, resets the wrong-guess counter, and records the mode and the target celebrity.
+  - `getEngine()` returns the current engine (creating one if needed).
+  - `getAllCelebrities()` returns the full list sorted by name, for the celebrity picker.
+  - `findCelebrityByName()` turns the name passed between screens back into a `Celebrity`.
+  - `calculateScore()` and `getRatingStars()` turn the number of questions into the Target Mode score and rating.
+- **Activities** read from and write to the shared engine and `GameManager`. Each one handles only its own screen and button taps.
 
 ---
 
 ## Look and feel
 
-- **Colors:** orange `#FF7C52`, light orange `#FFCA5C` and dark brown `#2B0E0A`.
-- **Font:** `Southern Beach` (`res/font/southern_beach`).
-- **Theme:** `Theme.AKIJEET` for the XML screens.
-- **Assets:** an orange gradient background and the `quizz.png` logo.
+- **Background:** a purple radial gradient from `#7575B7` in the centre to `#36377D` at the edges (`drawable/background.xml`).
+- **Cards and buttons:** light lavender cards (`#D4D4EC`) with dark navy (`#1E1E31`) buttons and text.
+- **Font:** `Southern Beach` (`res/font/southern_beach.ttf`), used across all screens.
+- **Logo:** `quizz.png`, shown on the splash and start screens.
+- **Theme:** `Theme.AKIJEET`, based on Material Components (DayNight, no action bar).
+- **Motion:** 800 ms fade-in and fade-out between all screens.
 
 ---
 
@@ -275,14 +359,18 @@ celebrities.json
 ### Requirements
 
 - Android Studio (a recent version that supports Android Gradle Plugin 8.13)
-- JDK 21 (the one bundled with Android Studio works)
-- An Android phone with USB debugging enabled, or an emulator. A real phone is usually faster.
+- JDK 17 or newer (the one bundled with Android Studio works)
+- An Android phone (Android 7.0 or newer) with USB debugging enabled, or an emulator. A real phone is usually faster.
 
 ### Steps
 
-1. Clone the repository and open the project folder in Android Studio.
-2. Wait for the Gradle sync to finish.
-3. Select your device and press **Run**.
+1. Clone the repository:
+   ```
+   git clone https://github.com/akxatygi/Akinatorjeet.git
+   ```
+2. Open the project folder in Android Studio.
+3. Wait for the Gradle sync to finish.
+4. Select your device and press **Run**.
 
 ### Release build
 
@@ -292,7 +380,7 @@ For a signed release APK: **Build > Generate Signed App Bundle / APK**. Keep you
 
 ## Testing
 
-`GameEngineTest` plays the whole game once for **each** of the 30 celebrities, answering honestly from the JSON, and checks that:
+`GameEngineTest` plays the whole game once for **each** celebrity in the dataset, answering honestly from the JSON, and checks that:
 
 - the engine guesses the right celebrity, and
 - it uses 15 questions or fewer.
@@ -303,35 +391,49 @@ Run it from Android Studio by right-clicking `GameEngineTest.kt` and choosing **
 ./gradlew testDebugUnitTest
 ```
 
-Run this test again after every change to `celebrities.json` or the tuning constants. The test covers the engine only, not the screens.
+Run this test again after every change to `celebrities.json` or the tuning constants. The test covers the engine only, not the screens or the Target Mode scoring.
 
 ---
 
 ## Known limitations
 
-- **Small dataset.** Only 30 people, so the game only works if you pick someone from the list.
+- **Small dataset.** Only 60 people, so the game only works if you pick someone from the list.
 - **Hand-made data.** Facts were compiled by hand and may contain errors. Anything uncertain is marked `0`. Time-sensitive facts (awards, whether someone is alive) can go out of date.
 - **No learning.** If the app fails, it does not remember who you were thinking of.
 - **Some celebrities are hard to tell apart**, so the app may need extra questions for them (for example, pairs that differ in only one fact).
-- **Back button on the result screen.** `QuestionActivity` stays in the back stack after a guess, so pressing Back on the result screen can send the player back into the question flow and reopen the guess screen. **Play again** is not affected because it clears the whole task.
-- **Game state is in memory only.** `GameManager` keeps everything in static fields, so if Android removes the app process in the background, the game restarts from a fresh engine.
+- **Top scores are hard to reach.** The score curve gives 100 points for 5 questions or fewer, but with truthful answers the engine currently needs about 8 to 13 questions, so realistic scores in Target Mode are roughly 60 to 85.
+- **Target Mode trusts the player.** The guess screen does not check whether the guessed celebrity is the chosen target, and wrong guesses do not lower the score. Tapping **YES!** on any guess counts as a win.
+- **High scores are not saved.** The score is shown on the result screen only.
+- **Back button on the result screen.** `QuestionActivity` stays in the back stack after a guess, so pressing Back on the result screen can send the player back into the question flow and reopen the guess screen. **PLAY AGAIN** is not affected because it clears the whole task.
+- **Game state is in memory only.** `GameManager` keeps everything in static fields, so if Android removes the app process in the background, the game restarts from a fresh engine in Classic Mode.
 - **No photos.** Celebrity photos are usually copyrighted, so none are included.
 
 ---
 
-## Roadmap(stuff i want to add)
+## Roadmap
 
-- [ ] Add a new mode where the user will pick a celeb beforehand and will try to get a highscore by predicting it in least amount of question
+Done:
+
+- [x] Target Celeb Challenge mode with a score and star rating
+- [x] Instructions screen for each mode
+- [x] Searchable celebrity picker
+- [x] Fade animations between screens
+- [x] Custom font, colour theme and logo
+- [x] Dataset grown from 30 to 60 celebrities and from 20 to 24 questions
+
+Planned:
+
 - [ ] Learning mode: when the app loses, ask who it was and save the new celebrity locally (Room database)
 - [ ] More celebrities and better questions
 - [ ] Animations between questions
+- [ ] Save high scores for Target Mode
 - [ ] Back / undo button for the last answer
 - [ ] Licensed or open-licensed celebrity images
 - [ ] Sound and haptic feedback
 - [ ] Hindi language support through `strings.xml`
 - [ ] Fix the back-stack behaviour after a guess (finish `QuestionActivity` or handle Back on the result screen)
+- [ ] Check the guess against the target in Target Mode, and tune the score curve
 - [ ] Move the "3 wrong guesses" limit into one shared constant
-- [ ] Remove the unused `GameViewModel`, or put it to use
 
 ---
 
@@ -344,3 +446,5 @@ This is an independent, non-commercial student project. It is not affiliated wit
 ## Author
 
 Built by **ni3k** as a learning project (Kotlin, Android Studio).
+
+Contributions, bug reports, and dataset corrections are welcome.
